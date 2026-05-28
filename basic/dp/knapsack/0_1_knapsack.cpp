@@ -61,7 +61,7 @@ int knapsackStandard(const vector<int> &weights, const vector<int> &values, int 
 int knapsackExact(const vector<int> &weights, const vector<int> &values, int capacity)
 {
   int n = weights.size();
-  constexpr int INT_NEG = 0x3f3f3f3f;
+  constexpr int INT_NEG = -0x3f3f3f3f;
 
   vector<vector<int>> dp(n + 1, vector<int>(capacity + 1, INT_NEG));
 
@@ -74,17 +74,18 @@ int knapsackExact(const vector<int> &weights, const vector<int> &values, int cap
 
     for (int j = 0; j <= capacity; j++)
     {
+      dp[i][j] = dp[i - 1][j];
       if (j >= w)
       {
         dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - w] + v);
       }
     }
-
-    if (dp[n][capacity] < 0)
-      return -1;
-
-    return dp[n][capacity];
   }
+
+  if (dp[n][capacity] < 0)
+    return -1;
+
+  return dp[n][capacity];
 }
 
 /**
